@@ -1,8 +1,12 @@
 #include "romconfig.h"
+#include "app_mqtt.h"
 
 ROMCONFIG romConfig;
+APPMQTT mymqtt;
 
 int main() {
-    printf("Vo Anh Tuan");
+
+    mymqtt.app_mqtt_connect();
+    printf("Vo Anh Tuan\n");
     return 0;
 }
