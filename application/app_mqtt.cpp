@@ -7,10 +7,10 @@
 
 // const std::string SERVER_ADDRESS("tcp://localhost:1883");
 // const std::string CLIENT_ID("paho_cpp_async_subcribe");
-const std::string TOPIC("hello");
+// const std::string TOPIC("hello");
 
-const int QOS = 1;
-const int N_RETRY_ATTEMPTS = 5;
+// const int qos_ = 1;
+// const int N_RETRY_ATTEMPTS = 5;
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -57,6 +57,11 @@ class callback : public virtual mqtt::callback,
                  public virtual mqtt::iaction_listener
 
 {
+    int qos_ = 1;
+    int N_RETRY_ATTEMPTS = 5;
+    std::string cli_id_;
+    std::string topic_event_;
+    std::string topic_cmd_;
     // Counter for the number of connection retries
     int nretry_;
     // The MQTT client
@@ -105,11 +110,12 @@ class callback : public virtual mqtt::callback,
         std::cout << "\nConnection success" << std::endl;
         // std::cout << "\nSubscribing to topic '" << TOPIC << "'\n"
         //           << "\tfor client " << CLIENT_ID
-        //           << " using QoS" << QOS << "\n"
+        //           << " using QoS" << qos_ << "\n"
         //           << "\nPress Q<Enter> to quit\n"
         //           << std::endl;
 
-        cli_.subscribe(TOPIC, QOS, nullptr, subListener_);
+        cli_.subscribe(cli_id_ + topic_event_, qos_, nullptr, subListener_);
+        cli_.subscribe(cli_id_ + topic_cmd_, qos_, nullptr, subListener_);
     }
 
     // Callback for when the connection is lost.
@@ -137,8 +143,9 @@ class callback : public virtual mqtt::callback,
     void delivery_complete(mqtt::delivery_token_ptr token) override {}
 
 public:
-    callback(mqtt::async_client &cli, mqtt::connect_options &connOpts)
-        : nretry_(0), cli_(cli), connOpts_(connOpts), subListener_("Subscription") {}
+    callback(mqtt::async_client &cli, mqtt::connect_options &connOpts, std::string cli_id, std::string topic_event, std::string topic_cmd)
+        : nretry_(0), cli_(cli), connOpts_(connOpts), subListener_("Subscription"),
+         cli_id_(cli_id), topic_event_(topic_event), topic_cmd_(topic_cmd) {}
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -149,14 +156,15 @@ void APPMQTT::app_mqtt_connect(void)
     // disconnected. In that case, it needs a unique ClientID and a
     // non-clean session.
 
-    mqtt::async_client cli(SERVER_ADDRESS, CLIENT_ID);
+    cli = new mqtt::async_client(SERVER_ADDRESS, CLIENT_ID);
 
     mqtt::connect_options connOpts;
     connOpts.set_clean_session(false);
 
     // Install the callback(s) before connecting.
-    callback cb(cli, connOpts);
-    cli.set_callback(cb);
+    callback cb(*cli, connOpts, CLIENT_ID, TOPIC_EVENT, TOPIC_CMD);
+
+    cli->set_callback(cb);
 
     // Start the connection.
     // When completed, the callback will subscribe to topic.
@@ -164,7 +172,7 @@ void APPMQTT::app_mqtt_connect(void)
     try
     {
         std::cout << "Connecting to the MQTT server..." << std::flush;
-        cli.connect(connOpts, nullptr, cb);
+        cli->connect(connOpts, nullptr, cb);
     }
     catch (const mqtt::exception &exc)
     {
@@ -180,10 +188,16 @@ void APPMQTT::app_mqtt_connect(void)
 
     // Disconnect
 
+    app_mqtt_disconnect();
+
+}
+
+void APPMQTT::app_mqtt_disconnect(void)
+{
     try
     {
         std::cout << "\nDisconnecting from the MQTT server..." << std::flush;
-        cli.disconnect()->wait();
+        cli->disconnect()->wait();
         std::cout << "OK" << std::endl;
     }
     catch (const mqtt::exception &exc)
@@ -191,6 +205,4 @@ void APPMQTT::app_mqtt_connect(void)
         std::cerr << exc << std::endl;
         return;
     }
-
-    return;
 }
