@@ -1,7 +1,40 @@
+#include <sys/ioctl.h>
+#include <linux/if.h>
+#include <netinet/ether.h>
+#include <unistd.h>
+#include <netdb.h>
+#include <cstring>
+#include <iostream>
 
+#include <nlohmann/json.hpp>
 #include "mqtt/async_client.h"
-
 #include "app_mqtt.h"
+#include "define.h"
+
+
+/////////////////////////////////////////////////////////////////////////////
+extern APPMQTT mymqtt;
+
+using myjson = nlohmann::json;
+
+///////////////////////////////////////////////////////////////////////////////
+// Read mac address and convert to string
+static std::string appGetMacAdd(void)
+{
+    int fd = socket(PF_INET, SOCK_DGRAM, IPPROTO_IP);
+
+    struct ifreq ifr{};
+    strcpy(ifr.ifr_name, "eth0");
+    ioctl(fd, SIOCGIFHWADDR, &ifr);
+    close(fd);
+
+    char mac[18];
+    strcpy(mac, ether_ntoa((ether_addr *) ifr.ifr_hwaddr.sa_data));
+
+    // std::cout << mac << std::endl;
+
+    return mac;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -59,9 +92,7 @@ class callback : public virtual mqtt::callback,
 {
     int qos_ = 1;
     int N_RETRY_ATTEMPTS = 5;
-    std::string cli_id_;
-    std::string topic_event_;
-    std::string topic_cmd_;
+
     // Counter for the number of connection retries
     int nretry_;
     // The MQTT client
@@ -114,8 +145,11 @@ class callback : public virtual mqtt::callback,
         //           << "\nPress Q<Enter> to quit\n"
         //           << std::endl;
 
-        cli_.subscribe(cli_id_ + topic_event_, qos_, nullptr, subListener_);
-        cli_.subscribe(cli_id_ + topic_cmd_, qos_, nullptr, subListener_);
+        // cli_.subscribe(cli_id_ + topic_event_, qos_, nullptr, subListener_);
+        // cli_.subscribe(cli_id_ + topic_cmd_, qos_, nullptr, subListener_);
+
+        cli_.subscribe(mymqtt.CLIENT_ID + mymqtt.TOPIC_CMD , qos_, nullptr, subListener_);
+        // cli_.subscribe(cli_id_ + topic_cmd_, qos_, nullptr, subListener_);
     }
 
     // Callback for when the connection is lost.
@@ -138,17 +172,28 @@ class callback : public virtual mqtt::callback,
         std::cout << "\ttopic: '" << msg->get_topic() << "'" << std::endl;
         std::cout << "\tpayload: '" << msg->to_string() << "'\n"
                   << std::endl;
+
+        mymqtt.app_mqtt_parsedata(msg->to_string());
     }
 
     void delivery_complete(mqtt::delivery_token_ptr token) override {}
 
 public:
-    callback(mqtt::async_client &cli, mqtt::connect_options &connOpts, std::string cli_id, std::string topic_event, std::string topic_cmd)
-        : nretry_(0), cli_(cli), connOpts_(connOpts), subListener_("Subscription"),
-         cli_id_(cli_id), topic_event_(topic_event), topic_cmd_(topic_cmd) {}
+    callback(mqtt::async_client &cli, mqtt::connect_options &connOpts)
+        : nretry_(0), cli_(cli), connOpts_(connOpts), subListener_("Subscription") {}
 };
 
-/////////////////////////////////////////////////////////////////////////////
+
+
+/*////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////*/
+
+APPMQTT::APPMQTT()
+{
+    CLIENT_ID = appGetMacAdd();
+    cli = new mqtt::async_client(SERVER_ADDRESS, CLIENT_ID);
+};
 
 void APPMQTT::app_mqtt_connect(void)
 {
@@ -156,13 +201,11 @@ void APPMQTT::app_mqtt_connect(void)
     // disconnected. In that case, it needs a unique ClientID and a
     // non-clean session.
 
-    cli = new mqtt::async_client(SERVER_ADDRESS, CLIENT_ID);
-
     mqtt::connect_options connOpts;
     connOpts.set_clean_session(false);
 
     // Install the callback(s) before connecting.
-    callback cb(*cli, connOpts, CLIENT_ID, TOPIC_EVENT, TOPIC_CMD);
+    callback cb(*cli, connOpts);
 
     cli->set_callback(cb);
 
@@ -189,9 +232,10 @@ void APPMQTT::app_mqtt_connect(void)
     // Disconnect
 
     app_mqtt_disconnect();
-
 }
 
+/// @brief Disconnect to mqtt server
+/// @param
 void APPMQTT::app_mqtt_disconnect(void)
 {
     try
@@ -205,4 +249,13 @@ void APPMQTT::app_mqtt_disconnect(void)
         std::cerr << exc << std::endl;
         return;
     }
+}
+
+/// @brief Parse data received from mqtt broker
+/// @param data
+void APPMQTT::app_mqtt_parsedata(std::string data)
+{
+    std::cout << "Message arrived" << std::endl;
+    myjson jData = myjson::parse(data);
+    std::cout << jData << std::endl;
 }
