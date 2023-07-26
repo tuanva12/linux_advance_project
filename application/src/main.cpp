@@ -17,24 +17,29 @@ APPMQTT mymqtt;
 ///////////////////////////////////////////////////////////////////////////////
 void *exe_thread_connection(void *arg)
 {
-    // mymqtt.app_mqtt_connect();
-    std::string data = "{\"type\":\"version\"}";
+    mymqtt.app_mqtt_connect();
 
-    mymqtt.app_mqtt_parsedata(data);
+    // Just block till user tells us to quit.
+
+    while (std::tolower(std::cin.get()) != 'q');
+
+    // Disconnect
+
+    mymqtt.app_mqtt_disconnect();
 
     pthread_exit(NULL);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int main() {
+int main()
+{
 
     pthread_t myThreadMqtt;
 
-    pthread_create(&myThreadMqtt, NULL, exe_thread_connection, (void*)"thread 1");
+    pthread_create(&myThreadMqtt, NULL, exe_thread_connection, (void *)"thread 1");
 
     pthread_join(myThreadMqtt, NULL);
-
 
     printf("Vo Anh Tuan\n");
     return 0;

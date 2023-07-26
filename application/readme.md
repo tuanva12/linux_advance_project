@@ -5,6 +5,12 @@ Build thư viện theo hướng dẫn tại readme trong repo.
 
 Sử dụng dinamic library: https://cylab.be/blog/234/creating-a-dynamic-library-in-c
 
+## Command test mosquito
+
+mosquitto_pub -h 192.168.15.5 -t 0:c:29:ff:dc:4a/command -m "{\"type\":\"version\"}"
+
+mosquitto_sub -h 192.168.15.5 -t 0:c:29:ff:dc:4a/command
+
 # json
 
 sudo apt-get install nlohmann-json3-dev
