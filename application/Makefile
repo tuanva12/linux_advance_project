@@ -8,7 +8,7 @@ OBJS += app_mqtt.o
 
  # build the executable.
 ${EXEC}: ${OBJS}
-	${CXX} -o ${EXEC} ${OBJS} -lpaho-mqttpp3 -lpaho-mqtt3as
+	${CXX} -o ${EXEC} ${OBJS} -lpaho-mqttpp3 -lpaho-mqtt3as -lpthread
 	mv ${EXEC} ./build
 	mv ${OBJS} ./build
 	echo Run cmd ./build/${EXEC} for run application.
