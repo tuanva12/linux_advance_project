@@ -11,9 +11,16 @@ mosquitto_pub -h 192.168.15.5 -t 0:c:29:ff:dc:4a/command -m "{\"type\":\"version
 
 mosquitto_sub -h 192.168.15.5 -t 0:c:29:ff:dc:4a/command
 
-# json
+# install json library
 
-sudo apt-get install nlohmann-json3-dev
+1. git clone https://github.com/nlohmann/json.git
+2. mkdir build
+3. cd build
+4. cmake ..
+5. make
+6. make install
+
+Cần cross complier g++ khi build cho BBB
 
 # FFmpeg
 
