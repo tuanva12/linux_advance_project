@@ -17,4 +17,7 @@ $ g++ -std=c++11 grab.cpp webcam.cpp -ograb -lv4l2
 Calling `./grab` acquires one image from `/dev/video0` and saves it as
 `frame.ppm`.
 
-
+Convert to png
+```
+ffmpeg -i frame.ppm out.png
+```
