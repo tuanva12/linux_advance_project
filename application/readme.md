@@ -24,4 +24,6 @@ Cần cross complier g++ khi build cho BBB
 
 # FFmpeg
 
+Install https://github.com/FFmpeg/FFmpeg/blob/master/INSTALL.md
+
 CMD capture image: ffmpeg -f video4linux2 -i /dev/video0 -vframes 1  -video_size 640x480 test.jpeg
