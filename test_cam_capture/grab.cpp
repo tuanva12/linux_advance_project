@@ -3,8 +3,8 @@
 
 #include "webcam.h"
 
-#define XRES 640
-#define YRES 480
+#define XRES 1280
+#define YRES 720
 
 using namespace std;
 
@@ -15,8 +15,8 @@ int main(int argc, char** argv)
     auto frame = webcam.frame();
 
     ofstream image;
-    image.open("frame.ppm");
-    image << "P6\n" << XRES << " " << YRES << " 255\n";
+    image.open("frame.jpg");
+    // image << "P6\n" << XRES << " " << YRES << " 255\n";
     image.write((char *) frame.data, frame.size);
     image.close();
 

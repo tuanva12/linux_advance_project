@@ -1,26 +1,28 @@
 /** Small C++ wrapper around V4L example code to access the webcam
-**/
+ **/
 
 #include <string>
 #include <memory> // unique_ptr
 
-struct buffer {
-      void   *data;
-      size_t  size;
+struct buffer
+{
+    void *data;
+    size_t size;
 };
 
-struct RGBImage {
-      unsigned char   *data; // RGB888 <=> RGB24
-      size_t          width;
-      size_t          height;
-      size_t          size; // width * height * 3
+struct RGBImage
+{
+    unsigned char *data; // RGB888 <=> RGB24
+    size_t width;
+    size_t height;
+    size_t size; // width * height * 3
 };
 
-
-class Webcam {
+class Webcam
+{
 
 public:
-    Webcam(const std::string& device = "/dev/video0",
+    Webcam(const std::string &device = "/dev/video0",
            int width = 640,
            int height = 480);
 
@@ -37,7 +39,7 @@ public:
      *
      * Throws a runtime_error if the timeout is reached.
      */
-    const RGBImage& frame(int timeout = 10);
+    const RGBImage &frame(int timeout = 10);
 
 private:
     void init_mmap();
@@ -51,21 +53,17 @@ private:
     void start_capturing();
     void stop_capturing();
 
-    bool read_frame();
+    uint64_t read_frame();
 
     std::string device;
     int fd;
 
     RGBImage rgb_frame;
-    struct buffer          *buffers;
-    unsigned int     n_buffers;
+    struct buffer *buffers;
+    unsigned int n_buffers;
 
     size_t xres, yres;
     size_t stride;
 
     bool force_format = true;
 };
-
-
-
-
