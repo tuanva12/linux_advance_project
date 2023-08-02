@@ -1,4 +1,5 @@
 #include <sys/ioctl.h>
+#include <sys/socket.h>
 #include <linux/if.h>
 #include <netinet/ether.h>
 #include <unistd.h>

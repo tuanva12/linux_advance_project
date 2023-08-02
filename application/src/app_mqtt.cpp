@@ -1,4 +1,5 @@
 #include <sys/ioctl.h>
+#include <sys/socket.h>
 #include <linux/if.h>
 #include <netinet/ether.h>
 #include <unistd.h>
@@ -25,7 +26,7 @@ static std::string appGetMacAdd(void)
     struct ifreq ifr
     {
     };
-    strcpy(ifr.ifr_name, "ens33");
+    strcpy(ifr.ifr_name, "eth0");
     ioctl(fd, SIOCGIFHWADDR, &ifr);
     close(fd);
 

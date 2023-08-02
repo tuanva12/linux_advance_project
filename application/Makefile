@@ -1,5 +1,5 @@
-# CXX = /home/caphuong/linux_trainning/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++
-CXX = g++
+CXX = /home/caphuong/linux_advance_project/application/library/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++
+# CXX = g++
 
 TARGET_EXEC := exe_project
 
@@ -29,13 +29,13 @@ OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 # The final build step.
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CXX) $(OBJS) -o $@ -lpaho-mqttpp3 -lpaho-mqtt3as -lpthread
+	$(CXX) $(OBJS) -o $@ -lpaho-mqttpp3 -lpaho-mqtt3a -lpthread -L./
 
 
 # Build step for C++ source
 $(BUILD_DIR)/%.cpp.o: %.cpp
 	mkdir -p $(dir $@)
-	$(CXX) -c $< -o $@
+	$(CXX) -c $< -o $@ -I./library/json/include -I./library/paho.mqtt.c/src -I./library/paho.mqtt.cpp/src
 
 
 .PHONY: clean

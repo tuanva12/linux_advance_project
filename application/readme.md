@@ -5,9 +5,37 @@ Build thư viện theo hướng dẫn tại readme trong repo.
 
 Sử dụng dinamic library: https://cylab.be/blog/234/creating-a-dynamic-library-in-c
 
+BUILD:
+1. Build c
+```
+$ cd application/library/
+$ git clone https://github.com/eclipse/paho.mqtt.c.git
+$ cd paho.mqtt.c
+$ git checkout v1.3.8
+$ cmake -Bbuild -H. -DPAHO_ENABLE_TESTING=OFF -DPAHO_BUILD_STATIC=ON \
+-DPAHO_WITH_SSL=ON -DPAHO_HIGH_PERFORMANCE=ON \
+-DCMAKE_INSTALL_PREFIX=./build/_install \
+-DCMAKE_C_COMPILER=/home/caphuong/linux_advance_project/application/library/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc
+$ sudo cmake --build build --target install
+$ sudo ldconfig
+```
+2. Build c++
+```
+$ git clone https://github.com/eclipse/paho.mqtt.cpp
+$ cd paho.mqtt.cpp
+
+$ cmake -Bbuild -H. -DPAHO_BUILD_STATIC=ON \
+-DPAHO_BUILD_DOCUMENTATION=TRUE -DPAHO_BUILD_SAMPLES=TRUE \
+-DCMAKE_CXX_COMPILER=/home/caphuong/linux_advance_project/application/library/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++ \
+-DPAHO_WITH_SSL=OFF \
+-DCMAKE_PREFIX_PATH=/home/caphuong/linux_advance_project/application/library/paho.mqtt.c/build/_install
+$ sudo cmake --build build --target install
+$ sudo ldconfig
+```
+
 ## Command test mosquito
 
-mosquitto_pub -h 192.168.15.5 -t 0:c:29:ff:dc:4a/command -m "{\"type\":\"version\"}"
+mosquitto_pub -h 192.168.15.5 -t 60:e8:5b:fc:f3:b4/command -m "{\"type\":\"version\"}"
 
 mosquitto_sub -h 192.168.15.5 -t 0:c:29:ff:dc:4a/command
 
@@ -20,7 +48,6 @@ mosquitto_sub -h 192.168.15.5 -t 0:c:29:ff:dc:4a/command
 5. make
 6. make install
 
-Cần cross complier g++ khi build cho BBB
 
 # FFmpeg
 
