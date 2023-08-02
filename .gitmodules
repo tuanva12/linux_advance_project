@@ -1,0 +1,9 @@
+[submodule "application/library/paho.mqtt.c"]
+	path = application/library/paho.mqtt.c
+	url = https://github.com/eclipse/paho.mqtt.c.git
+[submodule "application/library/paho.mqtt.cpp"]
+	path = application/library/paho.mqtt.cpp
+	url = https://github.com/eclipse/paho.mqtt.cpp
+[submodule "application/library/json"]
+	path = application/library/json
+	url = https://github.com/nlohmann/json.git
