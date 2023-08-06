@@ -54,3 +54,66 @@ mosquitto_sub -h 192.168.15.5 -t 0:c:29:ff:dc:4a/command
 Install https://github.com/FFmpeg/FFmpeg/blob/master/INSTALL.md
 
 CMD capture image: ffmpeg -f video4linux2 -i /dev/video0 -vframes 1  -video_size 640x480 test.jpeg
+
+
+
+
+
+
+# FTP-Transfer image to ftp server
+Su dung thu vien curl.
+### Build curt
+Để buile được lib cho curl cần có openssl trước.
+
+1. Build opennssl
+
+- Tai source:
+```
+$ wget https://github.com/openssl/openssl/releases/download/openssl-3.1.2/openssl-3.1.2.tar.gz
+```
+- Giai nen:
+```
+$ tar -xf openssl-3.1.2.tar.gz
+$ cd openssl-3.1.2
+```
+- Config:
+```
+./Configure --openssldir=/home/caphuong/my_rootfs/usr/local/ssl --prefix=/home/caphuong/my_rootfs/usr/local/ --cross-compile-prefix=/home/caphuong/linux_trainning/toolchain/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf- linux-armv4 no-shared
+```
+- Build
+```
+$ make
+```
+- Install
+```
+$ make install
+```
+
+Thu vien se được install tại : /home/caphuong/my_rootfs/
+
+2. Build curl
+
+- Tải source.
+```
+$ wget https://github.com/curl/curl/releases/download/curl-8_2_1/curl-8.2.1.tar.gz
+```
+- Giải nén.
+```
+$ tar -xf curl-8.2.1.tar.gz && cd curl-8.2.1
+```
+- Config.
+```
+$ export PATH=$PATH:/home/caphuong/linux_trainning/toolchain/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/
+$ export CC=arm-linux-gnueabihf-gcc
+$ ./configure --with-ssl=/home/caphuong/my_rootfs/usr/local --host=armv4 --disable-shared --prefix=/home/caphuong/my_rootfs/usr/local
+```
+- Build.
+```
+$ make
+```
+
+
+### Build test app
+```
+/home/caphuong/linux_trainning/toolchain/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc -o main main.c -I/home/caphuong/my_rootfs/usr/local/include/ -L/home/caphuong/my_rootfs/usr/local/lib/ -lcurl -lssl -lcrypto -lpthread -ldl
+```
