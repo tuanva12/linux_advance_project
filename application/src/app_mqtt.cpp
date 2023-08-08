@@ -155,9 +155,11 @@ void callback::delivery_complete(mqtt::delivery_token_ptr token) {}
 
 ////////////////////////////////////////////////////////////////////////////*/
 
-APPMQTT::APPMQTT()
+void APPMQTT::appMqttInit(std::string ipAdd, std::string port)
 {
     CLIENT_ID = appGetMacAdd();
+    SERVER_ADDRESS = "tcp://" + ipAdd + ":" + port;
+
     cli = new mqtt::async_client(SERVER_ADDRESS, CLIENT_ID);
 
     connOpts.set_clean_session(false);
@@ -165,31 +167,23 @@ APPMQTT::APPMQTT()
     cb = new callback (*cli, connOpts);
 
     cli->set_callback(*cb);
-};
+}
 
-void APPMQTT::app_mqtt_connect(void)
+bool APPMQTT::app_mqtt_connect(void)
 {
 
     try
     {
         std::cout << "Connecting to the MQTT server..." << std::flush;
         cli->connect(connOpts, nullptr, *cb);
+        return true;
     }
     catch (const mqtt::exception &exc)
     {
         std::cerr << "\nERROR: Unable to connect to MQTT server: '"
                   << SERVER_ADDRESS << "'" << exc << std::endl;
-        return;
+        return false;
     }
-
-    // Just block till user tells us to quit.
-
-    // while (std::tolower(std::cin.get()) != 'q')
-    //     ;
-
-    // Disconnect
-
-    // app_mqtt_disconnect();
 }
 
 /// @brief Disconnect to mqtt server

@@ -1,0 +1,7 @@
+{
+    "mqttIp" : "192.168.15.5" ,
+    "mqttPort" : "1883",
+    "ftpServerIP" : "192.168.15.5",
+    "ftpUsr" : "pi",
+    "ftpPwd" : "1"
+}

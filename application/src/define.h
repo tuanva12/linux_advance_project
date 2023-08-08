@@ -1,6 +1,3 @@
-
-
-
 #ifndef _DEFINE_H__
 #define _DEFINE_H__
 
@@ -12,6 +9,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <string>
 
 #define myprint(__myinfo__) std::cout << __myinfo__ << std::endl
 
@@ -36,5 +34,14 @@ typedef struct
     bool downloadFlag;
     bool rebootFlag;
 }flag_struct_t;
+
+typedef struct
+{
+    std::string mqttIp;
+    std::string mqttPort;
+    std::string ftpServerIP;
+    std::string ftpUsr;
+    std::string ftpPwd;
+}app_config_db_t;
 
 #endif // _DEFINE_H__

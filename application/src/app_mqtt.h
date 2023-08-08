@@ -94,17 +94,17 @@ public:
 class APPMQTT
 {
 protected:
+    std::string SERVER_ADDRESS;
 
 
 public:
-    std::string SERVER_ADDRESS = "tcp://192.168.15.5:1883";
-    std::string CLIENT_ID = "MAC_ADD";
     std::string TOPIC_EVENT = "/event";
     std::string TOPIC_CMD = "/command";
+    std::string CLIENT_ID;
 
-    APPMQTT();
+    void appMqttInit(std::string ipAdd, std::string port);
 
-    void app_mqtt_connect(void);
+    bool app_mqtt_connect(void);
     void app_mqtt_disconnect(void);
     void app_mqtt_parsedata(std::string data);
 
