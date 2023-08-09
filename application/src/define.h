@@ -26,14 +26,15 @@ typedef enum
     CMD_REBOOT,
     CMD_DOWNLOAD,
     CMD_VIEWCAM
-}cmd_status_t;
+} cmd_status_t;
 
 typedef struct
 {
-    bool streamFlag;
-    bool downloadFlag;
-    bool rebootFlag;
-}flag_struct_t;
+    bool streamFlag;   /*  */
+    bool downloadFlag; /*  */
+    bool rebootFlag;   /*  */
+    bool captureFlag;  /*  */
+} flag_struct_t;
 
 typedef struct
 {
@@ -42,6 +43,6 @@ typedef struct
     std::string ftpServerIP;
     std::string ftpUsr;
     std::string ftpPwd;
-}app_config_db_t;
+} app_config_db_t;
 
 #endif // _DEFINE_H__

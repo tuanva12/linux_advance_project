@@ -28,6 +28,7 @@
 #include "romconfig.h"
 #include "app_mqtt.h"
 #include "app_ftpupload.h"
+#include "app_system.h"
 #include "define.h"
 
 /* Private typedef -----------------------------------------------------------*/
@@ -44,6 +45,7 @@
 
 /* External variables --------------------------------------------------------*/
 ROMCONFIG romConfig; /*  */
+flag_struct_t controlFlag;
 
 APPMQTT mymqtt;      /*  */
 FtpUpload myFtpUpload;   /*  */
@@ -91,8 +93,10 @@ void *exe_thread_connection(void *arg)
 /// @return
 void *exe_thread_system(void *arg)
 {
-    /* Init for mqtt connect */
+    MYSYSTEM sysControl;
 
+    /* Main Rountine for capture, save log, setting sys time */
+    sysControl.mainRoutine();
 
     pthread_exit(NULL);
 }
