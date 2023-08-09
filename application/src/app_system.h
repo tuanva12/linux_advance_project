@@ -51,12 +51,14 @@ class MYSYSTEM
 {
 private:
     std::string rootFolder;
-    bool flag100ms = false;
-    pthread_t pcbThread100ms;
 
-    void timeCallback100ms(void);
+    /// @brief Check and create directory
+    /// @param typeData folder data: "image" for save image from camera
+    ///                              "data" for store log data
+    std::string CreateDirForSaveData(std::string typeData);
 
 public:
+    MYSYSTEM(std::string rootDir);
     void mainRoutine(void);
 };
 

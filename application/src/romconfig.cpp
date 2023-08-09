@@ -77,6 +77,7 @@ void DatabaseRead(void)
     AppDataBase.ftpServerIP = dataJson["ftpServerIP"];
     AppDataBase.ftpUsr = dataJson["ftpUsr"];
     AppDataBase.ftpPwd = dataJson["ftpPwd"];
+    AppDataBase.dirRootStore = dataJson["dirRootStore"];
 }
 
 /************************ (C) VO ANH TUAN *********************END OF FILE****/

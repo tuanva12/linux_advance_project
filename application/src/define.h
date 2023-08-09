@@ -43,6 +43,8 @@ typedef struct
     std::string ftpServerIP;
     std::string ftpUsr;
     std::string ftpPwd;
+
+    std::string dirRootStore;
 } app_config_db_t;
 
 #endif // _DEFINE_H__

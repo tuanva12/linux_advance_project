@@ -93,7 +93,7 @@ void *exe_thread_connection(void *arg)
 /// @return
 void *exe_thread_system(void *arg)
 {
-    MYSYSTEM sysControl;
+    MYSYSTEM sysControl(AppDataBase.dirRootStore);
 
     /* Main Rountine for capture, save log, setting sys time */
     sysControl.mainRoutine();

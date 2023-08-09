@@ -3,5 +3,6 @@
     "mqttPort" : "1883",
     "ftpServerIP" : "192.168.15.5",
     "ftpUsr" : "pi",
-    "ftpPwd" : "1"
+    "ftpPwd" : "1",
+    "dirRootStore" : "/home/debian/"
 }
