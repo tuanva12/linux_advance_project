@@ -12,7 +12,8 @@ int main(int argc, char** argv)
 {
 
     Webcam webcam("/dev/video0", XRES, YRES);
-    auto frame = webcam.frame();
+
+    auto frame = webcam.frame(5);
 
     ofstream image;
     image.open("frame.jpg");

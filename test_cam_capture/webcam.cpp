@@ -106,7 +106,7 @@ uint64_t YUYVtoJPEG(const uint8_t *input, const int width, const int height, uin
     int row_stride;
 
     // uint8_t* outbuffer = NULL;
-    uint64_t outlen = 0;
+    long unsigned int outlen = 0;
 
     cinfo.err = jpeg_std_error(&jerr);
     jpeg_create_compress(&cinfo);

@@ -117,3 +117,27 @@ $ make
 ```
 /home/caphuong/linux_trainning/toolchain/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-gcc -o main main.c -I/home/caphuong/my_rootfs/usr/local/include/ -L/home/caphuong/my_rootfs/usr/local/lib/ -lcurl -lssl -lcrypto -lpthread -ldl
 ```
+
+# Capture image
+## Build libjpeg
+```
+$ wget https://downloads.sourceforge.net/libjpeg-turbo/libjpeg-turbo-3.0.0.tar.gz
+$ tar -xf ........
+$ cd ....
+$ mkdir build
+$ cd build
+$ cmake .. -DCMAKE_INSTALL_PREFIX=/home/caphuong/my_rootfs/usr/local/ -DCMAKE_BUILD_TYPE=Release
+$ make
+$ make install
+```
+
+## Build v4l2 lib
+```
+$ sudo su
+$ wget https://www.linuxtv.org/downloads/v4l-utils/v4l-utils-1.24.1.tar.bz2
+$ tar -xf .....
+$ cd .....
+$ export PATH=$PATH:/home/caphuong/linux_trainning/toolchain/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/
+$ ./configure --prefix=/home/caphuong/my_rootfs/usr/local --host=arm-linux-gnueabihf
+
+```

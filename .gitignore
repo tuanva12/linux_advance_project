@@ -7,8 +7,5 @@ build
 *.mod.c
 *.mod.o
 *.symvers
-gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf
-gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf.tar.gz
-
-application/library/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf
+TestComponent
 

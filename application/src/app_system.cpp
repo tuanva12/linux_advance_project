@@ -20,6 +20,7 @@
 #include <cstring>
 #include <iostream>
 #include <thread>
+#include <fstream>
 
 #include "define.h"
 #include "app_system.h"
@@ -47,7 +48,8 @@ static void timeCallback100(void)
     while (true)
     {
         controlFlag.captureFlag = true;
-        usleep(1000000);
+        /* Sleep in one second */
+        usleep(60 * 1000000);
     }
 }
 
@@ -61,7 +63,9 @@ MYSYSTEM::MYSYSTEM(std::string rootDir)
 
     rootFolder = rootDir;
 }
-
+    /// @brief Check and create directory
+    /// @param typeData folder data: "image" for save image from camera
+    ///                              "data" for store log data
 std::string MYSYSTEM::CreateDirForSaveData(std::string typeData)
 {
     std::string day;
@@ -108,12 +112,24 @@ void MYSYSTEM::mainRoutine(void)
             {
                 /* Capture Image */
                 myprint("Start capture image");
+                std::string fileName = CreateDirForSaveData("image");
+                time_t now = time(0);
+                tm *ltm = localtime(&now);
+                fileName = fileName + std::to_string(ltm->tm_min) + ".txt";
+
+                std::ofstream MyFile(fileName);
+                MyFile << "Files can be tricky, but it is fun enough!";
+                MyFile.close();
+
+                controlFlag.captureFlag = false;
             }
         }
         /* Process when get stream command */
         if (controlFlag.streamFlag)
         {
             myprint("Start stream camera through RTSP");
+
+            controlFlag.streamFlag = false;
         }
 
         /* Delay in 100ms */

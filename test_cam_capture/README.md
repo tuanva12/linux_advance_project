@@ -11,7 +11,12 @@ $ sudo apt-get install libv4l2-dev
 
 Then:
 ```
-$ g++ -std=c++11 grab.cpp webcam.cpp -ograb -lv4l2 -ljpeg
+$ g++ -std=c++11 grab.cpp webcam.cpp -o grab -lv4l2 -ljpeg
+```
+For cross compile:
+```
+/home/caphuong/linux_trainning/toolchain/gcc-linaro-6.5.0-2018.12-x86_64_arm-linux-gnueabihf/bin/arm-linux-gnueabihf-g++ -std=c++11 grab.cpp webcam.cpp -o grab -static -lv4l2 -lv4lconvert -ljpeg -L/home/caphuong/my_rootfs/usr/local/lib/ -I/home/caphuong/my_rootfs/usr/local/include/
+
 ```
 
 Calling `./grab` acquires one image from `/dev/video0` and saves it as
