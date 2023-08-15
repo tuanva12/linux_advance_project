@@ -29,12 +29,14 @@
 #include "app_mqtt.h"
 #include "app_ftpupload.h"
 #include "app_system.h"
+#include "capture_camera.h"
 #include "define.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
 /* Private define ------------------------------------------------------------*/
-
+#define XRES 1280
+#define YRES 720
 /* Private macro -------------------------------------------------------------*/
 
 /* Private variables ---------------------------------------------------------*/
@@ -52,6 +54,7 @@ FtpUpload myFtpUpload;   /*  */
 
 app_config_db_t AppDataBase; /*  */
 
+Webcam webcam("/dev/video0", XRES, YRES);
 /******************************************************************************/
 /*                              FUNCTION                                      */
 /******************************************************************************/

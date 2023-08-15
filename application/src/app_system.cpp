@@ -24,6 +24,7 @@
 
 #include "define.h"
 #include "app_system.h"
+#include "capture_camera.h"
 
 /* Private typedef -----------------------------------------------------------*/
 
@@ -39,6 +40,7 @@
 
 /* External variables --------------------------------------------------------*/
 extern flag_struct_t controlFlag;
+extern Webcam webcam;
 /******************************************************************************/
 /*                              FUNCTION                                      */
 /******************************************************************************/
@@ -115,11 +117,9 @@ void MYSYSTEM::mainRoutine(void)
                 std::string fileName = CreateDirForSaveData("image");
                 time_t now = time(0);
                 tm *ltm = localtime(&now);
-                fileName = fileName + std::to_string(ltm->tm_min) + ".txt";
+                fileName = fileName + std::to_string(ltm->tm_hour) + std::to_string(ltm->tm_min) + std::to_string(ltm->tm_sec)+ ".jpg";
 
-                std::ofstream MyFile(fileName);
-                MyFile << "Files can be tricky, but it is fun enough!";
-                MyFile.close();
+                webcam.capture(fileName);
 
                 controlFlag.captureFlag = false;
             }

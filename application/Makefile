@@ -29,7 +29,7 @@ OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 # The final build step.
 $(BUILD_DIR)/$(TARGET_EXEC): $(OBJS)
-	$(CXX) $(OBJS) -o $@ -lpthread -lcurl -lssl -lcrypto -ldl -lpaho-mqttpp3 -lpaho-mqtt3a -L./ -L/home/caphuong/my_rootfs/usr/local/lib/
+	$(CXX) $(OBJS) -o $@ -lpthread -lcurl -lssl -lcrypto -l:libv4l2.a -l:libjpeg.a -ldl -lpaho-mqttpp3 -lpaho-mqtt3a -L./ -L/home/caphuong/my_rootfs/usr/local/lib/
 # scp ./build/exe_project debian@192.168.15.2:/home/debian
 
 # Build step for C++ source
